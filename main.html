@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property='og:title' content='Catss' />
+  <meta property='og:description' content="Looking for some cats? This is the place for you :3" />
+  <meta property='og:type' content='website' />
+  <meta property='og:url' content='https://catss.deno.dev/' />
+  <meta name='theme-color' content='#faa356' />
+
+  <title>😸 Catss</title>
+
+  <link rel="stylesheet" href="/public/main.css" type="text/css"> 
+</head>
+<body>
+  <div id="container">
+    <a href="https://catss.deno.dev"><h1>Catss</h1></a>
+    <div id="image"></div>
+    <button id="next">Next -></button>
+  </div>
+
+  <script>
+    const image  = document.querySelector('#image');
+    const button = document.querySelector('#next');
+
+    const changeImage = async () => {
+      const request = await fetch('https://api.thecatapi.com/v1/images/search?limit=1&size=full&mime_types=png,jpg,gif');
+      const json    = await request.json();
+
+      const { url } = json[0];
+
+      image.style.backgroundImage = `url(${url})`;
+    }
+
+    changeImage();
+    button.addEventListener('click', changeImage);
+    window.addEventListener('keydown', ({ keyCode }) => {
+      if (keyCode == 32) changeImage();
+    });
+  </script>
+</body>
+</html>
