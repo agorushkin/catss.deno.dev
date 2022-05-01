@@ -25,6 +25,7 @@
     const button = document.querySelector('#next');
 
     const gif = window.location.pathname == '/gif';
+    const q   = new URLSearchParams(window.location.search).get('q') || '';
 
     const changeImage = async () => {
       const request = await fetch(`https://api.thecatapi.com/v1/images/search?limit=1&size=full&mime_types=${ gif ? 'gif' : 'jpg,png,gif' }`);
@@ -32,10 +33,13 @@
 
       const { url } = json[0];
 
+      const name = url.split('/').pop();
+
+      window.history.pushState(null, null, `?q=${ name }`);
       image.style.backgroundImage = `url(${url})`;
     }
 
-    changeImage();
+    q.length ? image.style.backgroundImage = `url(https://cdn2.thecatapi.com/images/${ q })` : changeImage();
     button.addEventListener('click', changeImage);
     window.addEventListener('keydown', ({ keyCode }) => {
       if (keyCode == 32) changeImage();
