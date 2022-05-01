@@ -27,13 +27,16 @@
     const gif = window.location.pathname == '/gif';
     const q   = new URLSearchParams(window.location.search).get('q') || '';
 
+    let current = q;
+
     const changeImage = async () => {
-      const request = await fetch(`https://api.thecatapi.com/v1/images/search?limit=1&size=full&mime_types=${ gif ? 'gif' : 'jpg,png,gif' }`);
+      const request = await fetch(`https://api.thecatapi.com/v1/images/search?limit=1&size=full&mime_types=${ gif ? 'gif' : 'png,gif' }`);
       const json    = await request.json();
 
       const { url } = json[0];
 
       const name = url.split('/').pop();
+      current = name;
 
       window.history.pushState(null, null, `?q=${ name }`);
       image.style.backgroundImage = `url(${url})`;
@@ -43,6 +46,18 @@
     button.addEventListener('click', changeImage);
     window.addEventListener('keydown', ({ keyCode }) => {
       if (keyCode == 32) changeImage();
+    });
+
+    image.addEventListener('click', async () => {
+      const request  = await fetch(`${ window.location.origin }/get/${ current }`);
+      const blob     = await request.blob();
+      const mime     = request.headers.get('Content-Type');
+
+      await navigator.permissions.query({ name: 'clipboard-write' });
+
+      mime == 'image/gif'
+        ? navigator.clipboard.writeText(`https://cdn2.thecatapi.com/images/${ current }`)
+        : navigator.clipboard.write([new ClipboardItem({ [mime]: blob })]);
     });
   </script>
 </body>

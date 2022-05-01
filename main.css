@@ -59,6 +59,7 @@ a {
   text-align: center;
   text-decoration: none;
   color: #faa356;
+  outline: 0;
 }
 
 * {
