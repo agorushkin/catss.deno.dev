@@ -56,7 +56,7 @@
       await navigator.permissions.query({ name: 'clipboard-write' });
 
       mime == 'image/gif'
-        ? navigator.clipboard.writeText(`https://cdn2.thecatapi.com/images/${ current }`)
+        ? navigator.clipboard.writeText(`${ window.location.origin }/get/${ current }`)
         : navigator.clipboard.write([new ClipboardItem({ [mime]: blob })]);
     });
   </script>
