@@ -4,7 +4,7 @@ const server = new Server();
 
 server.static('/public/', './');
 
-const main = server.on('/');
+const main = server.on();
 main(({ respond }) => {
   fetch(`file://${ Deno.cwd( ) }/main.html`)
     .then(async (data) => respond({ body: await data.arrayBuffer(), headers: { 'content-type': 'text/html' } }))
